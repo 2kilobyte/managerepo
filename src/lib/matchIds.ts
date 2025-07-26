@@ -16,7 +16,7 @@ export async function GetLast3MatchIds(playerName: string) {
 
   const matchIds =
     data?.data?.[0]?.relationships?.matches?.data
-      ?.slice(0, 3)
+      ?.slice(0, 20)
       //@ts-expect-error Reason: TypeScript expects data to be an array
       .map((match) => match.id) || [];
 

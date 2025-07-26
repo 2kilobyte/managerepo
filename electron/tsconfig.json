@@ -1,0 +1,14 @@
+// electron/tsconfig.json
+{
+  "compilerOptions": {
+    "target": "ES2020",              // Modern JS support
+    "module": "commonjs",            // Required for Electron
+    "outDir": "../dist-electron",    // Output folder
+    "strict": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "types": ["node", "electron"],   // Key part: Electron + Node typings
+    "skipLibCheck": true
+  },
+  "include": ["main.ts"]
+}

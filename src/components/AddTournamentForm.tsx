@@ -9,6 +9,7 @@ export default function AddTournamentForm() {
     endDate: '',
     tier: '',
     region: '',
+    tournamentImage: '',
     prize: '',
     totalMatch: '',
     tournamentType: '', // ✅ new field
@@ -47,6 +48,7 @@ export default function AddTournamentForm() {
           endDate: '',
           tier: '',
           region: '',
+          tournamentImage: '',
           prize: '',
           totalMatch: '',
           tournamentType: '', // reset
@@ -75,6 +77,7 @@ export default function AddTournamentForm() {
         { name: 'endDate', label: 'End Date', type: 'date' },
         { name: 'tier', label: 'Tier' },
         { name: 'region', label: 'Region' },
+        { name: 'tournamentImage', label: 'Tournament Image' },
         { name: 'prize', label: 'Prize Pool (e.g. $500)' },
         { name: 'totalMatch', label: 'Total Matches', type: 'number' },
       ].map(({ name, label, type = 'text' }) => (

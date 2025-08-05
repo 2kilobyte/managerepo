@@ -33,10 +33,10 @@ export async function POST(req: Request) {
                 player2 ? { ign: player2, isLeader: leader === player2 } : null,
                 player3 ? { ign: player3, isLeader: leader === player3 } : null,
                 player4 ? { ign: player4, isLeader: leader === player4 } : null,
-                player5 ? { ign: player4, isLeader: leader === player4 } : null,
-                player6 ? { ign: player4, isLeader: leader === player4 } : null,
-                player7 ? { ign: player4, isLeader: leader === player4 } : null,
-                player8 ? { ign: player4, isLeader: leader === player4 } : null,
+                player5 ? { ign: player5, isLeader: leader === player5 } : null,
+                player6 ? { ign: player6, isLeader: leader === player6 } : null,
+                player7 ? { ign: player7, isLeader: leader === player7 } : null,
+                player8 ? { ign: player8, isLeader: leader === player8 } : null,
             ].filter(Boolean), // Removes null entries
             createdAt: new Date(),
         });

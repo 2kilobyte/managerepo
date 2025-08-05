@@ -12,7 +12,9 @@ const Header = () => {
                 </Link>
             </div>
             <nav className="space-x-4">
-                <Link href="/add-tournament" className="p-3 bg-amber-700 rounded">Add Tournaments</Link>
+                <Link href="/lives" className="hover:underline">Lives</Link>
+                <Link href="/add-tournament" className="p-3 bg-amber-700 rounded mr-2">Add Tournaments</Link>
+                <Link href="/add-live" className="p-3 bg-amber-700 rounded">Add Live</Link>
                 
             </nav>
         </div>

@@ -12,6 +12,10 @@ const AddTeamForm = () => {
     player2: '',
     player3: '',
     player4: '',
+    player5: '',
+    player6: '',
+    player7: '',
+    player8: '',
     leader: '',
     tournamentId: tournamentId || '',
   });
@@ -51,6 +55,10 @@ const AddTeamForm = () => {
         player2: '',
         player3: '',
         player4: '',
+        player5: '',
+        player6: '',
+        player7: '',
+        player8: '',
         leader: '',
         tournamentId: tournamentId?.toString() || '',
       });
@@ -59,7 +67,7 @@ const AddTeamForm = () => {
     }
   };
 
-  const playerOptions = [form.player1, form.player2, form.player3, form.player4].filter(Boolean);
+  const playerOptions = [form.player1, form.player2, form.player3, form.player4, form.player5, form.player6, form.player7, form.player8].filter(Boolean);
 
   return (
     <form
@@ -84,7 +92,7 @@ const AddTeamForm = () => {
         />
       </div>
 
-      {[1, 2, 3, 4].map((num) => (
+      {[1, 2, 3, 4, 5,6,7,8].map((num) => (
         <div key={num}>
           <label className="block text-sm mb-1">Player {num} IGN{num === 1 ? ' *' : ''}</label>
           <input

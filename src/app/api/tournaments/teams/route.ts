@@ -4,7 +4,7 @@ import clientPromise from '@/lib/mongodb'; // MongoDB connection helper
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const { teamName, player1, player2, player3, player4, leader, tournamentId } = body;
+        const { teamName, player1, player2, player3, player4, player5, player6, player7, player8, leader, tournamentId } = body;
 
         // Basic validation
         if (!teamName || !player1 || !leader || !tournamentId) {
@@ -33,6 +33,10 @@ export async function POST(req: Request) {
                 player2 ? { ign: player2, isLeader: leader === player2 } : null,
                 player3 ? { ign: player3, isLeader: leader === player3 } : null,
                 player4 ? { ign: player4, isLeader: leader === player4 } : null,
+                player5 ? { ign: player4, isLeader: leader === player4 } : null,
+                player6 ? { ign: player4, isLeader: leader === player4 } : null,
+                player7 ? { ign: player4, isLeader: leader === player4 } : null,
+                player8 ? { ign: player4, isLeader: leader === player4 } : null,
             ].filter(Boolean), // Removes null entries
             createdAt: new Date(),
         });

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
 
-export async function PUT(req: Request) {
+export async function PUT() {
   try {
     const client = await clientPromise;
     const db = client.db('bd71');

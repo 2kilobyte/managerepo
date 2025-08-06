@@ -4,10 +4,10 @@ import clientPromise from '@/lib/mongodb'; // MongoDB connection helper
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const { teamName, player1, player2, player3, player4, player5, player6, player7, player8, leader, tournamentId } = body;
+        const { teamName, player1, player2, player3, player4, player5, player6, player7, player8, leader, tournamentId, teamGameId } = body;
 
         // Basic validation
-        if (!teamName || !player1 || !leader || !tournamentId) {
+        if (!teamName || !player1 || !leader || !tournamentId || !teamGameId) {
         return NextResponse.json(
             { error: 'Team name, Player1, and Leader are required.' },
             { status: 400 }
@@ -17,16 +17,20 @@ export async function POST(req: Request) {
         const client = await clientPromise;
         const db = client.db('bd71'); // Replace with your DB name
 
-        const existingTeamCount = await db.collection('teams').countDocuments({
-            tournamentId,
-        });
-        
+        // Check if the team already exists
+        const existingTeam = await db.collection('teams').findOne({ teamGameId });
+        if (existingTeam) {
+            return NextResponse.json(       
+                { error: 'Team already exists for this tournament.' },
+                { status: 409 }
+            );
+        }
 
 
         // Insert team
         const result = await db.collection('teams').insertOne({
             tournamentId, // Assuming no tournament association at creation
-            teamGameId: existingTeamCount + 1, // Incremental team ID
+            teamGameId, // Incremental team ID
             teamName,
             players: [
                 { ign: player1, isLeader: leader === player1 },

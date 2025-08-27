@@ -14,6 +14,7 @@ interface Tournament {
   region: string;
   prize: string;
   totalMatch: number;
+  tournamentImage: string;
 }
 
 export default function Home() {
@@ -45,6 +46,7 @@ export default function Home() {
         ) : tournaments.length > 0 ? (
           tournaments.map((tournament) => (
             <TournamentsCard
+              tournamentImage={tournament.tournamentImage}
               key={tournament._id}
               id={tournament._id}
               tournamentName={tournament.tournamentName}

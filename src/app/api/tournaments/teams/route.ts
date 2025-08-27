@@ -57,18 +57,32 @@ export async function POST(req: Request) {
         );
     }
 }
-export async function GET() {
-    try {
-        const client = await clientPromise;
-        const db = client.db('bd71'); // Replace with your DB name
-        const teams = await db.collection('teams').find().toArray();
 
-        return NextResponse.json({ teams }, { status: 200 });
+export async function GET(req: Request) {
+    try {
+        const { searchParams } = new URL(req.url);
+        const tournamentId = searchParams.get('tournamentId');
+
+        if (!tournamentId) {
+            return NextResponse.json(
+                { error: 'tournamentId query parameter is required.' },
+                { status: 400 }
+            );
+        }
+
+        const client = await clientPromise;
+        const db = client.db('bd71');
+        const teams = await db
+            .collection('teams')
+            .find({ tournamentId })
+            .toArray();
+
+        return NextResponse.json(teams, { status: 200 });
     } catch (error) {
         console.error('Error fetching teams:', error);
         return NextResponse.json(
-        { error: 'Internal Server Error' },
-        { status: 500 }
+            { error: 'Internal Server Error' },
+            { status: 500 }
         );
     }
 }

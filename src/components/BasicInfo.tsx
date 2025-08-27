@@ -26,9 +26,10 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ tournament, teams, onDiscordSetup
               <div className="flex items-center justify-between">
                 <div className='flex flex-row'>
                   
-                  <h2 className="text-3xl font-bold text-white tracking-wide">
-                    {tournament.tournamentName}
-                  </h2>
+                  
+                    <h2 className="text-3xl font-bold text-white tracking-wide overflow-hidden text-ellipsis whitespace-nowrap max-w-[500px]">
+                      {tournament.tournamentName}
+                    </h2>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Link title='Back' className='px-4 py-1 bg-gray-600 rounded text-white mr-4 text-3xl' href="/"> <IoIosArrowRoundBack /> </Link>

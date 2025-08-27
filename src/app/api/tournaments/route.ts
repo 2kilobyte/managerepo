@@ -9,9 +9,9 @@ export async function POST(req: Request) {
         const db = client.db('bd71'); // Adjust database name as needed
 
 
-        const { tournamentName, startingDate, endDate, tier, region, prize, totalMatch, tournamentType, tournamentImage } = body;
+        const { tournamentName, startingDate, endDate, tier, region, prize, totalMatch, tournamentType, tournamentImage, isScream } = body;
 
-        if ( !tournamentName || !startingDate || !endDate || !tier || !region || !prize || !totalMatch || !tournamentType || !tournamentImage) {
+        if ( !tournamentName || !startingDate || !endDate || !tier || !region || !prize || !totalMatch || !tournamentType || !tournamentImage ) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
@@ -40,6 +40,7 @@ export async function POST(req: Request) {
             tournamentImage,
             region,
             prize,
+            isScream,
             totalMatch,
             createdAt: new Date(),
             teamCodes: Array.from(teamCodes),

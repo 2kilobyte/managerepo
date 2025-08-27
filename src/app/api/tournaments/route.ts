@@ -15,6 +15,22 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
+        // Generate 30 unique 16-character team codes (format: xxxx-xxxx-xxxx-xxxx, lowercase, alphanumeric)
+        const generateTeamCode = () => {
+            const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            let code = '';
+            for (let i = 0; i < 16; i++) {
+          code += chars[Math.floor(Math.random() * chars.length)];
+            }
+            // Format as xxxx-xxxx-xxxx-xxxx
+            return code.match(/.{1,4}/g)!.join('-');
+        };
+
+        const teamCodes = new Set<string>();
+        while (teamCodes.size < 40) {
+            teamCodes.add(generateTeamCode());
+        }
+
         const result = await db.collection('tournaments').insertOne({
             tournamentName,
             tournamentType,
@@ -26,6 +42,7 @@ export async function POST(req: Request) {
             prize,
             totalMatch,
             createdAt: new Date(),
+            teamCodes: Array.from(teamCodes),
         });
 
         return NextResponse.json({ 

@@ -6,10 +6,15 @@ import Header from '@/components/Header';
 import BasicInfo from '@/components/BasicInfo';
 import TabsSection from '@/components/tabsSection';
 import StickyButton from '@/components/StickyButton';
+import { Team, Tournament } from '@/lib/shareInterface';
+import GenerateObserverZip from '@/components/GenerateObserverZip';
+import Participents from '@/components/Participents';
+import toast from 'react-hot-toast';
 
 const TournamentDetails = () => {
   const { tournamentId } = useParams();
-  const [tournament, setTournament] = useState(null);
+  const [tournament, setTournament] = useState<Tournament | null>(null);
+  const [teams, setTeams] = useState<Team[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -18,9 +23,12 @@ const TournamentDetails = () => {
     const fetchTournament = async () => {
       try {
         const res = await fetch(`/api/tournaments/details?tournamentId=${tournamentId}`);
-        if (!res.ok) throw new Error('Failed to fetch tournament');
+        const teamsRes = await fetch(`/api/tournaments/teams?tournamentId=${tournamentId}`);
+        if (!res.ok || !teamsRes.ok) throw new Error('Failed to fetch tournament');
         const data = await res.json();
+        const teamData = await teamsRes.json();
         setTournament(data.tournament);
+        setTeams(teamData)
       } catch (err) {
         console.error(err);
       } finally {
@@ -31,10 +39,32 @@ const TournamentDetails = () => {
     fetchTournament();
   }, [tournamentId]);
 
-  console.log('tournamentId:', tournamentId);
-  
 
+   // ✅ Define the Discord setup handler function
+  const handleDiscordSetup = async () => {
+    if (!tournamentId) {
+      toast.error("Tournament ID not found.");
+      return;
+    }
+    try {
+      toast.loading("Setting up Discord...");
+      const response = await fetch(`/api/tournaments/discord?tournamentId=${tournamentId}`, {
+        method: 'POST',
+      });
 
+      const data = await response.json();
+      toast.dismiss(); // Remove loading toast
+
+      if (!response.ok) {
+         toast.error(data.error || 'Failed to setup Discord');
+      }
+
+      toast.success(data.message || 'Discord setup completed!');
+    } catch (error: any) {
+      toast.dismiss();
+      toast.error(error.message || 'Something went wrong.');
+    }
+  };
 
   return (
     <div>
@@ -44,23 +74,8 @@ const TournamentDetails = () => {
       }{
         tournament && !loading &&
       <div className="container mx-auto">
-        <BasicInfo tournament={tournament} />
-        <TabsSection />
-        <StickyButton
-          title="Add Team"
-          link={`/${tournamentId}/add-team`}
-          classNames="bg-[#D18800] p-4 absolute right-2 bottom-2"
-        />
-        <StickyButton
-          title="Add Match"
-          link={`/${tournamentId}/add-match`}
-          classNames="bg-[#463e3e] p-4 absolute right-40 bottom-2"
-        />
-        <StickyButton
-          title="Back"
-          link="/"
-          classNames="bg-[#463e3e] p-4 absolute left-2 bottom-2"
-        />
+        <BasicInfo onDiscordSetup={handleDiscordSetup} tournament={tournament} teams={teams}  />
+        <Participents teams={teams} />
       </div>
       }
       {

@@ -89,7 +89,7 @@ const GenerateObserverZip: React.FC<Props> = ({ teams }) => {
         }
       }
 
-      zip.file('TeamInfo.csv', csvLines.join('\n'));
+      zip.file('Teaminfo.csv', csvLines.join('\n'));
 
       const blob = await zip.generateAsync({ type: 'blob' });
       saveAs(blob, 'observer-files.zip');

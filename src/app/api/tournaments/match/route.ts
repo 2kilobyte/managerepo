@@ -17,11 +17,27 @@ export async function POST(req: Request) {
     const client = await clientPromise;
     const db = client.db('bd71'); // Your DB name
 
+    const response = await fetch(`https://api.pubg.com/shards/steam/matches/${matchId}`, {
+        headers: {
+          Accept: "application/vnd.api+json",
+        },
+    });
+
+    if (!response.ok) {
+      return NextResponse.json(
+        { error: 'Pubg server busy now try again letter' },
+        { status: 400 }
+      );
+    }
+
+    const matchData = await response.json()
+
     // Insert match data
     const result = await db.collection('matches').insertOne({
       matchName,
       map,
       matchId,
+      matchData: JSON.stringify(matchData),
       tournamentId,
       createdAt: new Date(),
     });

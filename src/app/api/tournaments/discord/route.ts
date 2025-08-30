@@ -1,4 +1,4 @@
-import { assignRoleToUser, createVoiceChannel } from "@/lib/discordBot";
+import { assignRoleToUser, createVoiceChannel, createRoleForTeam, setChannelPermissions } from "@/lib/discordBot";
 import clientPromise from "@/lib/mongodb";
 import { NextResponse } from "next/server";
 
@@ -27,9 +27,12 @@ export async function POST(req: Request) {
             const userLimit = team.players ? team.players.length : 4;
             const channelName = team.name || `${team.teamGameId}. ${team.teamName}`;
             // Optionally, you can pass additional options such as parent category, permissions, etc.
-            await createVoiceChannel(channelName, userLimit);
+            const teamRole = await createRoleForTeam(team.teamName)
+            const teamChannel = await createVoiceChannel(channelName, userLimit);
+            await setChannelPermissions(teamChannel, teamRole)
             for(const player of team.players) {
                 await assignRoleToUser(player.discordName);
+                await assignRoleToUser(player.discordName, teamRole);
             }
         }
         

@@ -23,6 +23,7 @@ export interface Player {
 export interface Team {
   _id: string;
   teamName: string;
+  isApproved: boolean;
   teamShortName: string;
   teamLogo: string;
   teamCode: string;

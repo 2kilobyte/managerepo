@@ -36,8 +36,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ tournament, teams, onDiscordSetup
                   <Link href={`/${tournament._id}/add-match`} className=" bg-amber-600 rounded-3xl text-white px-4 py-2 !rounded-button whitespace-nowrap hover:bg-primary/90 transition-colors">
                     Add Match
                   </Link>
-                  <DownloadKeys data={tournament.teamCodes} />
-                  <GenerateObserverZip teams={teams}  />
+                  <GenerateObserverZip teams={teams.filter(team => team.isApproved === true)}  />
                   <button onClick={onDiscordSetup} className='px-6 py-2 bg-blue-900 rounded-3xl cursor-pointer'>Setup Discord</button>
                 </div>
               </div>

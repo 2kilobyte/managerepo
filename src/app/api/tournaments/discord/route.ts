@@ -18,7 +18,7 @@ export async function POST(req: Request) {
         const db = client.db('bd71');
         const teams = await db
             .collection('teams')
-            .find({ tournamentId })
+            .find({ tournamentId, isApproved: true }) // Only approved teams
             .toArray();
 
         for (const team of teams) {

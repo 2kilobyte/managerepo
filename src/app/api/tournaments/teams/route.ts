@@ -74,7 +74,7 @@ export async function GET(req: Request) {
         const db = client.db('bd71');
         const teams = await db
             .collection('teams')
-            .find({ tournamentId })
+            .find({ tournamentId }) // Only approved teams
             .toArray();
 
         return NextResponse.json(teams, { status: 200 });

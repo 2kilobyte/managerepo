@@ -16,20 +16,20 @@ export async function POST(req: Request) {
         }
 
         // Generate 30 unique 16-character team codes (format: xxxx-xxxx-xxxx-xxxx, lowercase, alphanumeric)
-        const generateTeamCode = () => {
-            const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-            let code = '';
-            for (let i = 0; i < 16; i++) {
-          code += chars[Math.floor(Math.random() * chars.length)];
-            }
-            // Format as xxxx-xxxx-xxxx-xxxx
-            return code.match(/.{1,4}/g)!.join('-');
-        };
+        // const generateTeamCode = () => {
+        //     const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        //     let code = '';
+        //     for (let i = 0; i < 16; i++) {
+        //   code += chars[Math.floor(Math.random() * chars.length)];
+        //     }
+        //     // Format as xxxx-xxxx-xxxx-xxxx
+        //     return code.match(/.{1,4}/g)!.join('-');
+        // };
 
-        const teamCodes = new Set<string>();
-        while (teamCodes.size < 40) {
-            teamCodes.add(generateTeamCode());
-        }
+        // const teamCodes = new Set<string>();
+        // while (teamCodes.size < 40) {
+        //     teamCodes.add(generateTeamCode());
+        // }
 
         const result = await db.collection('tournaments').insertOne({
             tournamentName,
@@ -43,7 +43,7 @@ export async function POST(req: Request) {
             isScream,
             totalMatch,
             createdAt: new Date(),
-            teamCodes: Array.from(teamCodes),
+            // teamCodes: Array.from(teamCodes),
         });
 
         return NextResponse.json({ 

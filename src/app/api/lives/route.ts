@@ -1,39 +1,37 @@
-import { NextResponse } from 'next/server';
-import clientPromise from '@/lib/mongodb'; // MongoDB connection helper
+import { NextResponse } from "next/server";
+import clientPromise from "@/lib/mongodb"; // adjust path
 
-export async function POST(req: Request) {
+export async function PUT(req: Request) {
   try {
-    const body = await req.json();
-    const { liveUrl } = body;
+    const { videoId } = await req.json();
 
-    // Basic validation
-    if (!liveUrl) {
-      return NextResponse.json(
-        { error: 'No live url found' },
-        { status: 400 }
-      );
+    if (!videoId) {
+      return NextResponse.json({ message: "videoId is required" }, { status: 400 });
     }
 
     const client = await clientPromise;
-    const db = client.db('bd71'); // Your DB name
+    const db = client.db("bd71"); // replace with your DB name
 
-    // Insert match data
-    const result = await db.collection('lives').insertOne({
-      liveUrl,
-      isEnded: false, // Assuming a new live is not ended
-      createdAt: new Date(),
-    });
+    // Find the latest live
+    const latestLive = await db.collection("lives").findOne({}, { sort: { createdAt: -1 } });
 
-    return NextResponse.json(
-      { message: 'Live added successfully', insertedId: result.insertedId },
-      { status: 201 }
+    if (!latestLive) {
+      return NextResponse.json({ message: "No live entry found" }, { status: 404 });
+    }
+
+    // Update videoId (and optionally isEnded)
+    const updateData: any = { videoId, isEnded: false  };
+
+
+    await db.collection("lives").updateOne(
+      { _id: latestLive._id },
+      { $set: updateData }
     );
+
+    return NextResponse.json({ message: "Live updated successfully", updated: updateData });
   } catch (error) {
-    console.error('Error adding lives:', error);
-    return NextResponse.json(
-      { error: 'Internal Server Error' },
-      { status: 500 }
-    );
+    console.error("Error updating live:", error);
+    return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 }
 
@@ -42,27 +40,19 @@ export async function POST(req: Request) {
 export async function GET() {
   try {
     const client = await clientPromise;
-    const db = client.db('bd71');
-
-    // Find the most recent live stream where isEnded is false
-    const live = await db
-      .collection('lives')
-      .findOne({ isEnded: false }, { sort: { createdAt: -1 } });
+    const db = client.db("bd71"); // replace with your DB name
+    const live = await db.collection("lives").findOne(
+      {}, 
+      { sort: { createdAt: -1 } } // get latest by createdAt
+    );
 
     if (!live) {
-      // No live stream found or all ended
-      return NextResponse.json({ url: null }, { status: 200 });
+      return NextResponse.json({ message: "No live found" }, { status: 404 });
     }
 
-    return NextResponse.json({ url: live.liveUrl }, { status: 200 });
+    return NextResponse.json(live);
   } catch (error) {
-    console.error('Error fetching live stream:', error);
-    return NextResponse.json(
-      { error: 'Internal Server Error' },
-      { status: 500 }
-    );
+    console.error("Error fetching live:", error);
+    return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 }
-
-
-

@@ -21,7 +21,7 @@ export async function PUT() {
     // Update isEnded to true for that live stream
     await db.collection('lives').updateOne(
       { _id: latestLive._id },
-      { $set: { isEnded: true, endedAt: new Date() } }
+      { $set: { isEnded: true } }
     );
 
     return NextResponse.json(

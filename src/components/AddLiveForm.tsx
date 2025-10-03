@@ -3,28 +3,28 @@
 import React, { useState } from 'react';
 
 const AddLiveForm = () => {
-  const [liveUrl, setLiveUrl] = useState('');
+  const [videoId, setVideoId] = useState('');
   const [message, setMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!liveUrl) {
+    if (!videoId) {
       setMessage('Live URL is required.');
       return;
     }
 
     try {
       const res = await fetch('/api/lives', {
-        method: 'POST',
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ liveUrl }),
+        body: JSON.stringify({ videoId }),
       });
 
       const data = await res.json();
       if (res.ok) {
         setMessage('✅ Live stream added successfully!');
-        setLiveUrl('');
+        setVideoId('');
       } else {
         setMessage(`❌ ${data.error || 'Failed to add live stream.'}`);
       }
@@ -42,13 +42,13 @@ const AddLiveForm = () => {
       <h2 className="text-2xl font-bold text-center text-yellow-400">Add Facebook Live Stream</h2>
 
       <div>
-        <label className="block text-sm mb-1">Live URL *</label>
+        <label className="block text-sm mb-1">Live Video Id *</label>
         <input
-          type="url"
-          name="url"
-          value={liveUrl}
-          onChange={(e) => setLiveUrl(e.target.value)}
-          placeholder="https://www.facebook.com/yourpage/videos/123456789"
+          type="text"
+          name="videoId"
+          value={videoId}
+          onChange={(e) => setVideoId(e.target.value)}
+          placeholder="live video id"
           required
           className="w-full p-2 rounded bg-[#2c2c2e] text-white outline-none focus:ring-2 focus:ring-yellow-400"
         />
